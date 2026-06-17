@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+@keyframes cc-spin { to { transform: rotate(360deg); } }
+@keyframes cc-pop { 0% { transform: scale(0.55); opacity: 0; } 60% { transform: scale(1.06); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes cc-draw-circle { from { stroke-dashoffset: 440; } to { stroke-dashoffset: 0; } }
+@keyframes cc-draw-check { from { stroke-dashoffset: 120; } to { stroke-dashoffset: 0; } }
+@keyframes cc-fade-up { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes cc-blink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
+@keyframes cc-pulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.7; } }
+@keyframes cc-tap { 0% { transform: translateY(72px) rotate(-5deg) scale(0.92); } 44% { transform: translateY(0) rotate(0deg) scale(1); } 60% { transform: translateY(0) rotate(0deg) scale(1); } 100% { transform: translateY(72px) rotate(-5deg) scale(0.92); } }
+@keyframes cc-glow { 0%,100% { opacity: 0; transform: translate(-50%,-50%) scale(0.7); } 50% { opacity: 0.7; transform: translate(-50%,-50%) scale(1.1); } }
+@keyframes cc-reader-pulse { 0%,100% { transform: translateX(-50%) scale(1); } 50% { transform: translateX(-50%) scale(1.04); } }
+</style>
+</helmet>
+
+<div style="min-height:100%; display:flex; align-items:center; justify-content:center; background:#e7e5df; padding:40px; box-sizing:border-box; font-family:'Manrope',-apple-system,system-ui,sans-serif;">
+  <x-import component="IOSDevice" from="./ios-frame.jsx" time="3:19" hint-size="402px,874px">
+
+    <!-- ============ 1 · NUEVA VENTA (CALCULADORA) ============ -->
+    <sc-if value="{{ isVenta }}" hint-placeholder-val="{{ true }}">
+    <div data-screen-label="Nueva venta" style="flex:1 0 auto; min-height:0; display:flex; flex-direction:column; background:#f4f4f7;">
+
+      <!-- header -->
+      <div style="position:relative; display:flex; align-items:center; justify-content:center; padding:62px 22px 12px;">
+        <div onClick="{{ onBackVenta }}" style="position:absolute; left:18px; bottom:10px; width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer;" style-active="opacity:0.5;">
+          <svg width="13" height="22" viewBox="0 0 13 22" fill="none"><path d="M11 2 L3 11 L11 20" stroke="#ff5a1f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div style="font-size:21px; font-weight:600; color:#16181c;">Nueva venta</div>
+      </div>
+
+      <!-- amount -->
+      <div style="display:flex; flex-direction:column; align-items:center; padding:46px 24px 0;">
+        <div style="font-size:18px; font-weight:500; color:#16181c;">Monto</div>
+        <div style="display:flex; align-items:center; gap:4px; margin-top:30px;">
+          <div style="display:flex; align-items:flex-start;">
+            <span style="font-size:38px; font-weight:800; color:#ff5a1f; line-height:1; margin-top:8px;">$</span>
+            <span style="font-size:62px; font-weight:800; color:#ff5a1f; line-height:1; letter-spacing:-1px;">{{ amountDisplay }}</span>
+          </div>
+          <div style="width:2px; height:54px; background:#79c6c0; border-radius:2px; animation:cc-blink 1.1s step-end infinite; margin-left:6px;"></div>
+        </div>
+        <div onClick="{{ noop }}" style="display:flex; align-items:center; gap:7px; margin-top:26px; cursor:pointer;" style-active="opacity:0.6;">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><line x1="9" y1="3" x2="9" y2="15" stroke="#2f6bdf" stroke-width="2.2" stroke-linecap="round"/><line x1="3" y1="9" x2="15" y2="9" stroke="#2f6bdf" stroke-width="2.2" stroke-linecap="round"/></svg>
+          <span style="font-size:17px; font-weight:600; color:#2f6bdf;">Referencia de venta</span>
+        </div>
+      </div>
+
+      <div style="flex:1;"></div>
+
+      <!-- keypad card -->
+      <div style="background:#fff; border-radius:28px 28px 0 0; padding:18px 14px 0; box-shadow:0 -6px 24px rgba(0,0,0,0.05);">
+        <div style="display:grid; grid-template-columns:repeat(3,1fr);">
+          <div onClick="{{ d1 }}" style="display:flex; align-items:center; justify-content:center; height:84px; font-size:30px; font-weight:600; color:#16181c; border-bottom:1.5px solid #efeff2; cursor:pointer;" style-active="background:#fdece4; border-bottom:2px solid #ff5a1f; border-radius:8px 8px 0 0;">1</div>
+          <div onClick="{{ d2 }}" style="display:flex; align-items:center; justify-content:center; height:84px; font-size:30px; font-weight:600; color:#16181c; border-bottom:1.5px solid #efeff2; cursor:pointer;" style-active="background:#fdece4; border-bottom:2px solid #ff5a1f; border-radius:8px 8px 0 0;">2</div>
+          <div onClick="{{ d3 }}" style="display:flex; align-items:center; justify-content:center; height:84px; font-size:30px; font-weight:600; color:#16181c; border-bottom:1.5px solid #efeff2; cursor:pointer;" style-active="background:#fdece4; border-bottom:2px solid #ff5a1f; border-radius:8px 8px 0 0;">3</div>
+          <div onClick="{{ d4 }}" style="display:flex; align-items:center; justify-content:center; height:84px; font-size:30px; font-weight:600; color:#16181c; border-bottom:1.5px solid #efeff2; cursor:pointer;" style-active="background:#fdece4; border-bottom:2px solid #ff5a1f; border-radius:8px 8px 0 0;">4</div>
+          <div onClick="{{ d5 }}" style="display:flex; align-items:center; justify-content:center; height:84px; font-size:30px; font-weight:600; color:#16181c; border-bottom:1.5px solid #efeff2; cursor:pointer;" style-active="background:#fdece4; border-bottom:2px solid #ff5a1f; border-radius:8px 8px 0 0;">5</div>
+          <div onClick="{{ d6 }}" style="display:flex; align-items:center; justify-content:center; height:84px; font-size:30px; font-weight:600; color:#16181c; border-bottom:1.5px solid #efeff2; cursor:pointer;" style-active="background:#fdece4; border-bottom:2px solid #ff5a1f; border-radius:8px 8px 0 0;">6</div>
+          <div onClick="{{ d7 }}" style="display:flex; align-items:center; justify-content:center; height:84px; font-size:30px; font-weight:600; color:#16181c; border-bottom:1.5px solid #efeff2; cursor:pointer;" style-active="background:#fdece4; border-bottom:2px solid #ff5a1f; border-radius:8px 8px 0 0;">7</div>
+          <div onClick="{{ d8 }}" style="display:flex; align-items:center; justify-content:center; height:84px; font-size:30px; font-weight:600; color:#16181c; border-bottom:1.5px solid #efeff2; cursor:pointer;" style-active="background:#fdece4; border-bottom:2px solid #ff5a1f; border-radius:8px 8px 0 0;">8</div>
+          <div onClick="{{ d9 }}" style="display:flex; align-items:center; justify-content:center; height:84px; font-size:30px; font-weight:600; color:#16181c; border-bottom:1.5px solid #efeff2; cursor:pointer;" style-active="background:#fdece4; border-bottom:2px solid #ff5a1f; border-radius:8px 8px 0 0;">9</div>
+          <div onClick="{{ clear }}" style="display:flex; align-items:center; justify-content:center; height:84px; font-size:28px; font-weight:700; color:#ff9d2b; cursor:pointer;" style-active="background:#fdece4; border-radius:8px;">C</div>
+          <div onClick="{{ d0 }}" style="display:flex; align-items:center; justify-content:center; height:84px; font-size:30px; font-weight:600; color:#16181c; cursor:pointer;" style-active="background:#fdece4; border-radius:8px;">0</div>
+          <div onClick="{{ back }}" style="display:flex; align-items:center; justify-content:center; height:84px; cursor:pointer;" style-active="background:#fdece4; border-radius:8px;">
+            <svg width="34" height="26" viewBox="0 0 34 26" fill="none"><path d="M11 2 H30 A2 2 0 0 1 32 4 V22 A2 2 0 0 1 30 24 H11 L2 13 Z" stroke="#ff5a1f" stroke-width="2" stroke-linejoin="round"/><path d="M16 9 L24 17 M24 9 L16 17" stroke="#ff5a1f" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+
+        <!-- continuar -->
+        <div style="padding:14px 6px 30px;">
+          <div onClick="{{ onContinuarVenta }}" style="background:#ff5a1f; border-radius:16px; padding:19px; text-align:center; cursor:pointer; box-shadow:0 8px 20px rgba(255,90,31,0.32);" style-active="transform:scale(0.985);">
+            <span style="font-size:18px; font-weight:700; color:#fff;">Continuar</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ 2 · PAGO CONTACTLESS (NFC) ============ -->
+    <sc-if value="{{ isNfc }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Pago contactless" style="flex:1 0 auto; min-height:0; display:flex; flex-direction:column; background:#fff;">
+
+      <!-- header -->
+      <div style="position:relative; display:flex; align-items:center; justify-content:center; padding:60px 22px 6px;">
+        <div onClick="{{ onBackToVenta }}" style="position:absolute; left:18px; bottom:6px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer;" style-active="opacity:0.5;">
+          <svg width="22" height="20" viewBox="0 0 22 20" fill="none"><path d="M9 2 L2 10 L9 18 M2 10 H20" stroke="#3a2d8a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <svg width="118" height="18" viewBox="0 0 320 48" fill="#ff5a1f"><path d="M283.5,0h11.7l24.1,48h-12.6l-17.4-37.5-17.2,37.5h-12.6L283.5,0Z"/><path d="M68.4,0h11.8v39.8h34.9l-4.2,8.2h-42.5V0Z"/><path d="M198.2,0h52.7v8.2h-20.4v39.8h-11.8V8.2h-20.4V0Z"/><path d="M153.7,0h11.7l24.1,48h-12.6l-17.4-37.5-17.2,37.5h-12.6L153.7,0Z"/><path d="M9.6.2c-2.8.1-5.5.4-7.9.8l-1.7.3v46.8h11.8v-16.4h1.8c0,0,9.2,0,9.2,0,3.4,0,6.6-.3,9.8-.8,3.2-.5,6.1-1.4,8.7-2.6h0s0,0,0,0c2.6-1.3,4.8-3,6.4-5.1,1.7-2.2,2.6-4.9,2.6-7.9s-.9-5.8-2.8-7.9c-1.7-2-4-3.6-6.7-4.7-2.6-1.1-5.5-1.8-8.7-2.2-3-.4-6-.6-9-.6s-10.7,0-13.5.2ZM29,8.8c1.8.3,3.4.7,4.8,1.3h0s0,0,0,0c1.4.6,2.3,1.3,3,2.2h0s0,0,0,0c.6.7,1,1.7,1,3s-.4,2.9-1.2,3.7h0s0,0,0,0c-.8,1-1.8,1.8-3.2,2.4-1.5.6-3.2,1.1-5.2,1.4-2,.2-4,.4-6,.4h-8.9c-.6,0-1.2,0-1.7,0v-14.7c.5,0,1,0,1.6,0,1.5,0,8.3,0,9.9,0s3.8.1,5.7.4Z"/></svg>
+      </div>
+
+      <!-- tappable area -->
+      <div onClick="{{ onTapNfc }}" style="flex:1; display:flex; flex-direction:column; align-items:center; padding:34px 32px 0; cursor:pointer;">
+        <div style="font-size:19px; font-weight:500; color:#0d4d49;">Pago contactless</div>
+
+        <!-- NFC reader + tapping card animation -->
+        <div style="position:relative; width:240px; height:248px; margin-top:20px;">
+          <!-- glow pulse behind reader -->
+          <div style="position:absolute; top:18px; left:50%; width:150px; height:150px; border-radius:50%; background:radial-gradient(circle, rgba(13,77,73,0.16), rgba(13,77,73,0) 70%); animation:cc-glow 2.2s ease-in-out infinite;"></div>
+          <!-- reader icon -->
+          <img src="lectornfc.svg" alt="Lector NFC" style="position:absolute; top:0; left:50%; transform:translateX(-50%); width:168px; height:auto; animation:cc-reader-pulse 2.2s ease-in-out infinite;">
+          <!-- card approaching -->
+          <img src="card.png" alt="Tarjeta" style="position:absolute; top:49px; left:50%; margin-left:-80px; width:160px; height:auto; filter:drop-shadow(0 14px 22px rgba(0,0,0,0.25)); animation:cc-tap 2.2s cubic-bezier(0.45,0,0.2,1) infinite;">
+        </div>
+        <div style="margin-top:18px; font-size:24px; font-weight:600; color:#16181c;">Acerca la tarjeta</div>
+
+        <!-- card brands -->
+        <div style="display:flex; align-items:center; gap:30px; margin-top:30px;">
+          <span style="font-size:22px; font-weight:800; font-style:italic; color:#1a1f71; letter-spacing:-0.5px;">VISA</span>
+          <svg width="44" height="28" viewBox="0 0 44 28"><circle cx="17" cy="14" r="12" fill="#eb001b"/><circle cx="27" cy="14" r="12" fill="#f79e1b" fill-opacity="0.92"/></svg>
+          <div style="background:#1f72cd; border-radius:4px; padding:5px 6px; display:flex; flex-direction:column; align-items:center; line-height:0.95;"><span style="font-size:9px; font-weight:800; color:#fff;">AM</span><span style="font-size:9px; font-weight:800; color:#fff;">EX</span></div>
+        </div>
+
+        <!-- total -->
+        <div style="margin-top:48px; font-size:21px; font-weight:500; color:#0d4d49;">Total por cobrar</div>
+        <div style="margin-top:8px; font-size:48px; font-weight:800; color:#0d4d49; letter-spacing:-1px;">${{ amountDisplay }}</div>
+
+        <div style="flex:1;"></div>
+        <div style="font-size:14px; color:#9a9a9a; text-align:center; line-height:1.5; max-width:280px; margin-bottom:8px;">El emisor de tu tarjeta pudiera solicitar verificación adicional.</div>
+      </div>
+
+      <!-- otra forma de pago -->
+      <div style="padding:10px 16px 30px;">
+        <div onClick="{{ onBackToVenta }}" style="background:#ff5a1f; border-radius:16px; padding:19px; text-align:center; cursor:pointer; box-shadow:0 8px 20px rgba(255,90,31,0.32);" style-active="transform:scale(0.985);">
+          <span style="font-size:18px; font-weight:700; color:#fff;">Otra forma de pago</span>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ 3 · PROCESANDO ============ -->
+    <sc-if value="{{ isProcesando }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Procesando" style="flex:1 0 auto; min-height:0; display:flex; flex-direction:column; align-items:center; background:#fff; padding:62px 32px 0;">
+      <svg width="118" height="18" viewBox="0 0 320 48" fill="#ff5a1f"><path d="M283.5,0h11.7l24.1,48h-12.6l-17.4-37.5-17.2,37.5h-12.6L283.5,0Z"/><path d="M68.4,0h11.8v39.8h34.9l-4.2,8.2h-42.5V0Z"/><path d="M198.2,0h52.7v8.2h-20.4v39.8h-11.8V8.2h-20.4V0Z"/><path d="M153.7,0h11.7l24.1,48h-12.6l-17.4-37.5-17.2,37.5h-12.6L153.7,0Z"/><path d="M9.6.2c-2.8.1-5.5.4-7.9.8l-1.7.3v46.8h11.8v-16.4h1.8c0,0,9.2,0,9.2,0,3.4,0,6.6-.3,9.8-.8,3.2-.5,6.1-1.4,8.7-2.6h0s0,0,0,0c2.6-1.3,4.8-3,6.4-5.1,1.7-2.2,2.6-4.9,2.6-7.9s-.9-5.8-2.8-7.9c-1.7-2-4-3.6-6.7-4.7-2.6-1.1-5.5-1.8-8.7-2.2-3-.4-6-.6-9-.6s-10.7,0-13.5.2ZM29,8.8c1.8.3,3.4.7,4.8,1.3h0s0,0,0,0c1.4.6,2.3,1.3,3,2.2h0s0,0,0,0c.6.7,1,1.7,1,3s-.4,2.9-1.2,3.7h0s0,0,0,0c-.8,1-1.8,1.8-3.2,2.4-1.5.6-3.2,1.1-5.2,1.4-2,.2-4,.4-6,.4h-8.9c-.6,0-1.2,0-1.7,0v-14.7c.5,0,1,0,1.6,0,1.5,0,8.3,0,9.9,0s3.8.1,5.7.4Z"/></svg>
+      <div style="margin-top:26px; font-size:19px; font-weight:600; color:#16181c;">Pago con tarjeta</div>
+
+      <div style="flex:1; display:flex; align-items:center; justify-content:center;">
+        <svg width="150" height="150" viewBox="0 0 50 50" style="animation:cc-spin 0.9s linear infinite;">
+          <circle cx="25" cy="25" r="20" fill="none" stroke="#fdeae0" stroke-width="4.5"/>
+          <path d="M25 5 a20 20 0 1 0 14 6" fill="none" stroke="#ff5a1f" stroke-width="4.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <div style="font-size:21px; font-weight:700; color:#16181c;">Procesando</div>
+      <div style="margin-top:14px; font-size:18px; font-weight:500; color:#7c7c82;">No retires la tarjeta</div>
+
+      <div style="height:48px;"></div>
+      <div style="font-size:18px; font-weight:500; color:#7c7c82;">Monto</div>
+      <div style="margin-top:8px; font-size:46px; font-weight:800; color:#16181c; letter-spacing:-1px;">${{ amountDisplay }}</div>
+      <div style="height:52px;"></div>
+    </div>
+    </sc-if>
+
+    <!-- ============ 4 · TRANSACCIÓN APROBADA ============ -->
+    <sc-if value="{{ isAprobada }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Transaccion aprobada" style="flex:1 0 auto; min-height:0; display:flex; flex-direction:column; align-items:center; background:#fff; padding:62px 28px 0;">
+      <svg width="118" height="18" viewBox="0 0 320 48" fill="#ff5a1f"><path d="M283.5,0h11.7l24.1,48h-12.6l-17.4-37.5-17.2,37.5h-12.6L283.5,0Z"/><path d="M68.4,0h11.8v39.8h34.9l-4.2,8.2h-42.5V0Z"/><path d="M198.2,0h52.7v8.2h-20.4v39.8h-11.8V8.2h-20.4V0Z"/><path d="M153.7,0h11.7l24.1,48h-12.6l-17.4-37.5-17.2,37.5h-12.6L153.7,0Z"/><path d="M9.6.2c-2.8.1-5.5.4-7.9.8l-1.7.3v46.8h11.8v-16.4h1.8c0,0,9.2,0,9.2,0,3.4,0,6.6-.3,9.8-.8,3.2-.5,6.1-1.4,8.7-2.6h0s0,0,0,0c2.6-1.3,4.8-3,6.4-5.1,1.7-2.2,2.6-4.9,2.6-7.9s-.9-5.8-2.8-7.9c-1.7-2-4-3.6-6.7-4.7-2.6-1.1-5.5-1.8-8.7-2.2-3-.4-6-.6-9-.6s-10.7,0-13.5.2ZM29,8.8c1.8.3,3.4.7,4.8,1.3h0s0,0,0,0c1.4.6,2.3,1.3,3,2.2h0s0,0,0,0c.6.7,1,1.7,1,3s-.4,2.9-1.2,3.7h0s0,0,0,0c-.8,1-1.8,1.8-3.2,2.4-1.5.6-3.2,1.1-5.2,1.4-2,.2-4,.4-6,.4h-8.9c-.6,0-1.2,0-1.7,0v-14.7c.5,0,1,0,1.6,0,1.5,0,8.3,0,9.9,0s3.8.1,5.7.4Z"/></svg>
+      <div style="margin-top:26px; font-size:19px; font-weight:600; color:#0d4d49;">Pago con tarjeta</div>
+
+      <div style="height:40px;"></div>
+      <svg width="150" height="150" viewBox="0 0 160 160" fill="none" style="animation:cc-pop 0.55s cubic-bezier(0.34,1.56,0.64,1) both;">
+        <circle cx="80" cy="80" r="70" stroke="#35d397" stroke-width="7" fill="none" style="stroke-dasharray:440; stroke-dashoffset:440; animation:cc-draw-circle 0.6s ease-out 0.1s forwards;"></circle>
+        <path d="M50 82 L72 104 L112 58" stroke="#35d397" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray:120; stroke-dashoffset:120; animation:cc-draw-check 0.4s ease-out 0.55s both;"></path>
+      </svg>
+
+      <div style="height:36px;"></div>
+      <div style="font-size:22px; font-weight:600; color:#16181c; animation:cc-fade-up 0.4s ease-out 0.8s both;">Transacción aprobada</div>
+      <div style="margin-top:16px; font-size:18px; font-weight:500; color:#7c7c82; animation:cc-fade-up 0.4s ease-out 0.9s both;">Ya puedes retirar tu tarjeta</div>
+
+      <div style="flex:1; min-height:24px;"></div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:8px; animation:cc-fade-up 0.4s ease-out 1s both;">
+        <span style="font-size:18px; font-weight:600; color:#2f7d76;">Monto</span>
+        <span style="font-size:46px; font-weight:800; color:#0d4d49; letter-spacing:-1px;">${{ amountDisplay }}</span>
+      </div>
+
+      <div style="width:100%; padding:30px 0 30px;">
+        <div onClick="{{ onContinuarAprobada }}" style="background:#ff5a1f; border-radius:16px; padding:19px; text-align:center; cursor:pointer; box-shadow:0 8px 20px rgba(255,90,31,0.32);" style-active="transform:scale(0.985);">
+          <span style="font-size:18px; font-weight:700; color:#fff;">Continuar</span>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+  </x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: { &quot;width&quot;: 402, &quot;height&quot;: 874 }
+}">
+class Component extends DCLogic {
+  state = { screen: 'venta', cents: 0 };
+
+  componentWillUnmount() { clearTimeout(this._t); }
+
+  fmt(cents) {
+    const v = (cents / 100).toFixed(2).split('.');
+    const intp = v[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return intp + '.' + v[1];
+  }
+
+  push(d) {
+    this.setState(s => {
+      const next = s.cents * 10 + d;
+      if (next > 99999999) return null;
+      return { cents: next };
+    });
+  }
+
+  renderVals() {
+    const s = this.state;
+    return {
+      isVenta: s.screen === 'venta',
+      isNfc: s.screen === 'nfc',
+      isProcesando: s.screen === 'procesando',
+      isAprobada: s.screen === 'aprobada',
+      amountDisplay: this.fmt(s.cents),
+      noop: () => {},
+      d0: () => this.push(0),
+      d1: () => this.push(1),
+      d2: () => this.push(2),
+      d3: () => this.push(3),
+      d4: () => this.push(4),
+      d5: () => this.push(5),
+      d6: () => this.push(6),
+      d7: () => this.push(7),
+      d8: () => this.push(8),
+      d9: () => this.push(9),
+      clear: () => this.setState({ cents: 0 }),
+      back: () => this.setState(st => ({ cents: Math.floor(st.cents / 10) })),
+      onBackVenta: () => this.setState({ cents: 0 }),
+      onContinuarVenta: () => {
+        if (this.state.cents <= 0) return;
+        this.setState({ screen: 'nfc' });
+      },
+      onBackToVenta: () => this.setState({ screen: 'venta' }),
+      onTapNfc: () => {
+        this.setState({ screen: 'procesando' });
+        clearTimeout(this._t);
+        this._t = setTimeout(() => this.setState({ screen: 'aprobada' }), 2600);
+      },
+      onContinuarAprobada: () => this.setState({ screen: 'venta', cents: 0 }),
+    };
+  }
+}
+</script>
+</body>
+</html>
